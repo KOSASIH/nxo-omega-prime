@@ -5,7 +5,7 @@ setuptools.setup(
     version='1.0.0',
     author='KOSASIH',
     author_email='kosasihg88@gmail.com',
-    description='Decentralized network infrastructure project',
+    description='The Future of Decentralized Communication and Data Exchange.',
     long_description=open('README.md').read(),
     long_description_content_type='text/markdown',
     url='https://github.com/KOSASIH/nxo-omega-prime',
