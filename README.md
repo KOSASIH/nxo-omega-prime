@@ -1,2 +1,76 @@
 # nxo-omega-prime
 Nexarion Omega Prime: The Future of Decentralized Communication and Data Exchange. 
+
+# Table of Contents
+
+- [Introduction](#introduction) 
+- [Architecture](#architecture) 
+- [Components](#components) 
+- [Getting Started](#getting-started) 
+- [Development](#development) 
+- [Testing](#testing) 
+- [Deployment](#deployment) 
+- [Security](#security) 
+- [Contributing](#security) 
+- [License](#license) 
+
+# Introduction
+
+Nexarion Omega Prime is a decentralized communication and data exchange platform that enables secure, private, and efficient exchange of information between individuals and organizations. Our mission is to create a future where data is owned and controlled by individuals, and where communication is free from centralized manipulation.
+
+# Architecture
+
+Nexarion Omega Prime is built using a modular architecture, consisting of the following components:
+
+- **Neurocore:** The core logic of the platform, responsible for data processing and encryption.
+- **Picrypt:** A cryptographic library for secure data encryption and decryption.
+- **Echoplex:** A decentralized communication protocol for secure and efficient data exchange.
+- **Auroranode:** A node management system for decentralized network management.
+- **Spectraos:** An operating system for decentralized applications.
+
+# Components
+
+- **Neurocore:** neurocore/ directory
+- **Picrypt:** picrypt/ directory
+- **Echoplex:** echoplex/ directory
+- **Auroranode:** auroranode/ directory
+- **Spectraos:** spectraos/ directory
+
+# Getting Started
+
+To get started with Nexarion Omega Prime, follow these steps:
+
+- Clone the repository: git clone https://github.com/KOSASIH/nxo-omega-prime.git
+- Install dependencies: pip install -r requirements.txt
+- Run the platform: python -m nxo_omega_prime
+
+# Development
+
+To contribute to Nexarion Omega Prime, follow these steps:
+
+1. Fork the repository: git fork https://github.com/KOSASIH/nxo-omega-prime.git
+2. Create a new branch: git branch my-feature
+3. Make changes and commit: git commit -m "My feature"
+4. Push changes: git push origin my-feature
+5. Create a pull request: git request-pull origin my-feature
+
+# Testing
+
+To run tests, use the following command: python -m unittest discover
+
+# Deployment
+
+To deploy Nexarion Omega Prime, use the following command: docker-compose up
+
+# Security
+Nexarion Omega Prime takes security seriously. If you find a vulnerability, please report it to security@nexarion.io.
+
+
+
+# Contributing
+
+Contributions are welcome! Please follow the guidelines in the CONTRIBUTING.md file.
+
+# License
+
+Nexarion Omega Prime is licensed under the Apache License 2.0.
