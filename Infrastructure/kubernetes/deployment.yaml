@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: spectraos-deployment
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: spectraos
+  template:
+    metadata:
+      labels:
+        app: spectraos
+    spec:
+      containers:
+      - name: spectraos
+        image: spectraos:latest
+        ports:
+        - containerPort: 8080
+        env:
+        - name: DATABASE_URL
+          value: postgres://user:password@db:5432/database
+        - name: SPECTRAOS_CONFIG
+          value: /etc/spectraos/config.yaml
+        volumeMounts:
+        - name: config-volume
+          mountPath: /etc/spectraos
+      volumes:
+      - name: config-volume
+        configMap:
+          name: spectraos-config
