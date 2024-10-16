@@ -87,7 +87,7 @@ To run tests, use the following command: python -m unittest discover
 To deploy Nexarion Omega Prime, use the following command: docker-compose up
 
 # Security
-Nexarion Omega Prime takes security seriously. If you find a vulnerability, please report it to security@nexarion.io.
+Nexarion Omega Prime takes security seriously. If you find a vulnerability, please report it to security@nexarion.com.
 
 
 
