@@ -1,1 +1,86 @@
+-- Language Profiles Database (v1.0.0 Galactic Standard Edition)
 
+-- Table: languages
+CREATE TABLE languages (
+  id SERIAL PRIMARY KEY,
+  language_name VARCHAR(100) NOT NULL UNIQUE,
+  language_code VARCHAR(10) NOT NULL UNIQUE,
+  language_family VARCHAR(50) NOT NULL,
+  language_type VARCHAR(20) NOT NULL CHECK (language_type IN ('NATURAL', 'ARTIFICIAL', 'HYBRID')),
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Table: language_samples
+CREATE TABLE language_samples (
+  id SERIAL PRIMARY KEY,
+  language_id INTEGER NOT NULL,
+  sample_text TEXT NOT NULL,
+  sample_type VARCHAR(20) NOT NULL CHECK (sample_type IN ('WRITTEN', 'SPOKEN', 'GESTURAL')),
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (language_id) REFERENCES languages(id)
+);
+
+-- Table: language_features
+CREATE TABLE language_features (
+  id SERIAL PRIMARY KEY,
+  language_id INTEGER NOT NULL,
+  feature_name VARCHAR(50) NOT NULL,
+  feature_description TEXT,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (language_id) REFERENCES languages(id)
+);
+
+-- Table: language_dialects
+CREATE TABLE language_dialects (
+  id SERIAL PRIMARY KEY,
+  language_id INTEGER NOT NULL,
+  dialect_name VARCHAR(50) NOT NULL,
+  dialect_description TEXT,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (language_id) REFERENCES languages(id)
+);
+
+-- Table: language_scripts
+CREATE TABLE language_scripts (
+  id SERIAL PRIMARY KEY,
+  language_id INTEGER NOT NULL,
+  script_name VARCHAR(50) NOT NULL,
+  script_description TEXT,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (language_id) REFERENCES languages(id)
+);
+
+-- Indexes
+CREATE INDEX idx_languages_language_name ON languages (language_name);
+CREATE INDEX idx_language_samples_language_id ON language_samples (language_id);
+CREATE INDEX idx_language_features_language_id ON language_features (language_id);
+CREATE INDEX idx_language_dialects_language_id ON language_dialects (language_id);
+CREATE INDEX idx_language_scripts_language_id ON language_scripts (language_id);
+
+-- Views
+CREATE VIEW vw_language_profiles AS
+SELECT l.language_name, l.language_code, l.language_family, l.language_type,
+       ls.sample_text, ls.sample_type,
+       lf.feature_name, lf.feature_description,
+       ld.dialect_name, ld.dialect_description,
+       ls.script_name, ls.script_description
+FROM languages l
+LEFT JOIN language_samples ls ON l.id = ls.language_id
+LEFT JOIN language_features lf ON l.id = lf.language_id
+LEFT JOIN language_dialects ld ON l.id = ld.language_id
+LEFT JOIN language_scripts ls ON l.id = ls.language_id;
+
+CREATE VIEW vw_language_samples AS
+SELECT l.language_name, ls.sample_text, ls.sample_type
+FROM languages l
+JOIN language_samples ls ON l.id = ls.language_id;
+
+CREATE VIEW vw_language_features AS
+SELECT l.language_name, lf.feature_name, lf.feature_description
+FROM languages l
+JOIN language_features lf ON l.id = lf.language_id;
