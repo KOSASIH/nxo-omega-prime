@@ -1,1 +1,116 @@
+-- Create the Galactic Lexicon database
+CREATE DATABASE galactic_lexicon;
 
+-- Use the Galactic Lexicon database
+USE galactic_lexicon;
+
+-- Create the Languages table
+CREATE TABLE languages (
+    id INT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    code VARCHAR(10) NOT NULL,
+    script VARCHAR(255) NOT NULL
+);
+
+-- Create the Words table
+CREATE TABLE words (
+    id INT PRIMARY KEY,
+    language_id INT NOT NULL,
+    word VARCHAR(255) NOT NULL,
+    translation VARCHAR(255) NOT NULL,
+    part_of_speech VARCHAR(255) NOT NULL,
+    FOREIGN KEY (language_id) REFERENCES languages(id)
+);
+
+-- Create the Phrases table
+CREATE TABLE phrases (
+    id INT PRIMARY KEY,
+    language_id INT NOT NULL,
+    phrase VARCHAR(255) NOT NULL,
+    translation VARCHAR(255) NOT NULL,
+    FOREIGN KEY (language_id) REFERENCES languages(id)
+);
+
+-- Create the Expressions table
+CREATE TABLE expressions (
+    id INT PRIMARY KEY,
+    language_id INT NOT NULL,
+    expression VARCHAR(255) NOT NULL,
+    translation VARCHAR(255) NOT NULL,
+    FOREIGN KEY (language_id) REFERENCES languages(id)
+);
+
+-- Create the Idioms table
+CREATE TABLE idioms (
+    id INT PRIMARY KEY,
+    language_id INT NOT NULL,
+    idiom VARCHAR(255) NOT NULL,
+    translation VARCHAR(255) NOT NULL,
+    FOREIGN KEY (language_id) REFERENCES languages(id)
+);
+
+-- Create the Proverbs table
+CREATE TABLE proverbs (
+    id INT PRIMARY KEY,
+    language_id INT NOT NULL,
+    proverb VARCHAR(255) NOT NULL,
+    translation VARCHAR(255) NOT NULL,
+    FOREIGN KEY (language_id) REFERENCES languages(id)
+);
+
+-- Insert sample data into the Languages table
+INSERT INTO languages (id, name, code, script)
+VALUES
+(1, 'Zyloxian', 'zyx', 'Zyloxian Script'),
+(2, 'Xhk'kht', 'xhk', 'Xhk'kht Script'),
+(3, 'N'Tari', 'nta', 'N'Tari Script');
+
+-- Insert sample data into the Words table
+INSERT INTO words (id, language_id, word, translation, part_of_speech)
+VALUES
+(1, 1, 'zhrak', 'hello', 'noun'),
+(2, 1, 'zhilak', 'goodbye', 'noun'),
+(3, 2, 'khtkht', 'hello', 'noun'),
+(4, 2, 'khtkhtkht', 'goodbye', 'noun'),
+(5, 3, 'ntari', 'hello', 'noun'),
+(6, 3, 'ntarikht', 'goodbye', 'noun');
+
+-- Insert sample data into the Phrases table
+INSERT INTO phrases (id, language_id, phrase, translation)
+VALUES
+(1, 1, 'zhrak zhilak', 'hello goodbye'),
+(2, 1, 'zhilak zhrak', 'goodbye hello'),
+(3, 2, 'khtkht khtkhtkht', 'hello goodbye'),
+(4, 2, 'khtkhtkht khtkht', 'goodbye hello'),
+(5, 3, 'ntari ntarikht', 'hello goodbye'),
+(6, 3, 'ntarikht ntari', 'goodbye hello');
+
+-- Insert sample data into the Expressions table
+INSERT INTO expressions (id, language_id, expression, translation)
+VALUES
+(1, 1, 'zhrak zhilak khtkht', 'hello goodbye friend'),
+(2, 1, 'zhilak zhrak khtkht', 'goodbye hello friend'),
+(3, 2, 'khtkht khtkhtkht khtkht', 'hello goodbye friend'),
+(4, 2, 'khtkhtkht khtkht khtkht', 'goodbye hello friend'),
+(5, 3, 'ntari ntarikht ntari', 'hello goodbye friend'),
+(6, 3, 'ntarikht ntari ntari', 'goodbye hello friend');
+
+-- Insert sample data into the Idioms table
+INSERT INTO idioms (id, language_id, idiom, translation)
+VALUES
+(1, 1, 'zhrak zhilak khtkht', 'break a leg'),
+(2, 1, 'zhilak zhrak khtkht', 'good luck'),
+(3, 2, 'khtkht khtkhtkht khtkht', 'break a leg'),
+(4, 2, 'khtkhtkht khtkht khtkht', 'good luck'),
+(5, 3, 'ntari ntarikht ntari', 'break a leg'),
+(6, 3, 'ntarikht ntari ntari', 'good luck');
+
+-- Insert sample data into the Proverbs table
+INSERT INTO proverbs (id, language_id, proverb, translation)
+VALUES
+(1, 1, 'zhrak zhilak khtkht', 'actions speak louder than words'),
+(2, 1, 'zhilak zhrak khtkht', 'patience is a virtue'),
+(3, 2, 'khtkht khtkhtkht khtkht', 'actions speak louder than words'),
+(4, 2, 'khtkhtkht khtkht khtkht', 'patience is a virtue'),
+(5, 3, 'ntari ntarikht ntari', 'actions speak louder than words'),
+(6, 3, 'ntarikht ntari ntari', 'patience is a virtue');
