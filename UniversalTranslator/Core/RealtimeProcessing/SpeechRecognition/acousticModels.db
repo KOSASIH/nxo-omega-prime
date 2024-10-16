@@ -1,1 +1,94 @@
+-- Create the Acoustic Models database
+CREATE DATABASE acoustic_models;
 
+-- Use the Acoustic Models database
+USE acoustic_models;
+
+-- Create the Species table
+CREATE TABLE species (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(255) NOT NULL,
+    code VARCHAR(10) NOT NULL,
+    classification VARCHAR(255) NOT NULL
+);
+
+-- Create the Languages table
+CREATE TABLE languages (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    species_id INT NOT NULL,
+    name VARCHAR(255) NOT NULL,
+    code VARCHAR(10) NOT NULL,
+    script VARCHAR(255) NOT NULL,
+    FOREIGN KEY (species_id) REFERENCES species(id)
+);
+
+-- Create the Acoustic Models table
+CREATE TABLE acoustic_models (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    language_id INT NOT NULL,
+    model_name VARCHAR(255) NOT NULL,
+    model_type VARCHAR(50) NOT NULL, -- e.g., "HMM", "DNN", "CNN"
+    model_file_path VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (language_id) REFERENCES languages(id)
+);
+
+-- Create the Model Parameters table
+CREATE TABLE model_parameters (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    model_id INT NOT NULL,
+    parameter_name VARCHAR(255) NOT NULL,
+    parameter_value VARCHAR(255) NOT NULL,
+    FOREIGN KEY (model_id) REFERENCES acoustic_models(id)
+);
+
+-- Create the Model Performance table
+CREATE TABLE model_performance (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    model_id INT NOT NULL,
+    accuracy FLOAT NOT NULL,
+    precision FLOAT NOT NULL,
+    recall FLOAT NOT NULL,
+    f1_score FLOAT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (model_id) REFERENCES acoustic_models(id)
+);
+
+-- Insert sample data into the Species table
+INSERT INTO species (name, code, classification)
+VALUES
+('Zyloxians', 'zyx', 'Mammalian'),
+('Xhk\'kht', 'xhk', 'Insectoid'),
+('N\'Tari', 'nta', 'Reptilian');
+
+-- Insert sample data into the Languages table
+INSERT INTO languages (species_id, name, code, script)
+VALUES
+(1, 'Zyloxian', 'zyx', 'Zyloxian Script'),
+(2,  'Xhk\'kht', 'xhk', 'Xhk\'kht Script'),
+(3,  'N\'Tari', 'nta', 'N\'Tari Script');
+
+-- Insert sample data into the Acoustic Models table
+INSERT INTO acoustic_models (language_id, model_name, model_type, model_file_path)
+VALUES
+(1, 'Zyloxian HMM Model', 'HMM', '/models/zyloxian_hmm.model'),
+(2, 'Xhk\'kht DNN Model', 'DNN', '/models/xhk_dnn.model'),
+(3, 'N\'Tari CNN Model', 'CNN', '/models/nta_cnn.model');
+
+-- Insert sample data into the Model Parameters table
+INSERT INTO model_parameters (model_id, parameter_name, parameter_value)
+VALUES
+(1, 'num_states', '5'),
+(1, 'num_mixtures', '3'),
+(2, 'num_layers', '4'),
+(2, 'activation_function', 'relu'),
+(3, 'num_filters', '64'),
+(3, 'kernel_size', '3');
+
+-- Insert sample data into the Model Performance table
+INSERT INTO model_performance (model_id, accuracy, precision, recall, f1_score)
+VALUES
+(1, 0.92, 0.90, 0.91, 0.91),
+(2, 0.95, 0.93, 0.94, 0.94),
+(3, 0.89, 0.87, 0.88, 0.87);
