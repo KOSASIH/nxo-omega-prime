@@ -1,1 +1,101 @@
+-- Create the Linguistic Features database
+CREATE DATABASE linguistic_features;
 
+-- Use the Linguistic Features database
+USE linguistic_features;
+
+-- Create the Species table
+CREATE TABLE species (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(255) NOT NULL,
+    code VARCHAR(10) NOT NULL,
+    classification VARCHAR(255) NOT NULL
+);
+
+-- Create the Languages table
+CREATE TABLE languages (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    species_id INT NOT NULL,
+    name VARCHAR(255) NOT NULL,
+    code VARCHAR(10) NOT NULL,
+    script VARCHAR(255) NOT NULL,
+    FOREIGN KEY (species_id) REFERENCES species(id)
+);
+
+-- Create the Phonetic Features table
+CREATE TABLE phonetic_features (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    language_id INT NOT NULL,
+    feature_name VARCHAR(255) NOT NULL,
+    feature_description TEXT NOT NULL,
+    FOREIGN KEY (language_id) REFERENCES languages(id)
+);
+
+-- Create the Syntactic Features table
+CREATE TABLE syntactic_features (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    language_id INT NOT NULL,
+    feature_name VARCHAR(255) NOT NULL,
+    feature_description TEXT NOT NULL,
+    FOREIGN KEY (language_id) REFERENCES languages(id)
+);
+
+-- Create the Semantic Features table
+CREATE TABLE semantic_features (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    language_id INT NOT NULL,
+    feature_name VARCHAR(255) NOT NULL,
+    feature_description TEXT NOT NULL,
+    FOREIGN KEY (language_id) REFERENCES languages(id)
+);
+
+-- Create the Pragmatic Features table
+CREATE TABLE pragmatic_features (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    language_id INT NOT NULL,
+    feature_name VARCHAR(255) NOT NULL,
+    feature_description TEXT NOT NULL,
+    FOREIGN KEY (language_id) REFERENCES languages(id)
+);
+
+-- Insert sample data into the Species table
+INSERT INTO species (name, code, classification)
+VALUES
+('Zyloxians', 'zyx', 'Mammalian'),
+('Xhk\'kht', 'xhk', 'Insectoid'),
+('N\'Tari', 'nta', 'Reptilian');
+
+-- Insert sample data into the Languages table
+INSERT INTO languages (species_id, name, code, script)
+VALUES
+(1, 'Zyloxian', 'zyx', 'Zyloxian Script'),
+(2, 'Xhk\'kht', 'xhk', 'Xhk\'kht Script'),
+(3, 'N\'Tari', 'nta', 'N\'Tari Script');
+
+-- Insert sample data into the Phonetic Features table
+INSERT INTO phonetic_features (language_id, feature_name, feature_description)
+VALUES
+(1, 'Vowel Harmony', 'Vowels within a word harmonize to share certain features.'),
+(2, 'Click Consonants', 'Utilizes click sounds as consonants.'),
+(3, 'Tonal Language', 'Meaning changes based on pitch and tone.');
+
+-- Insert sample data into the Syntactic Features table
+INSERT INTO syntactic_features (language_id, feature_name, feature_description)
+VALUES
+(1, 'SOV Order', 'Subject-Object-Verb word order.'),
+(2, 'Agglutinative Structure', 'Words are formed by stringing together morphemes.'),
+(3, 'Free Word Order', 'Flexible word order based on emphasis.');
+
+-- Insert sample data into the Semantic Features table
+INSERT INTO semantic_features (language_id, feature_name, feature_description)
+VALUES
+(1, 'Contextual Meaning', 'Meaning changes based on context.'),
+(2, 'Polysemy', 'Words have multiple meanings depending on usage.'),
+(3, 'Metaphorical Expressions', 'Common use of metaphors in everyday language.');
+
+-- Insert sample data into the Pragmatic Features table
+INSERT INTO pragmatic_features (language_id, feature_name, feature_description)
+VALUES
+(1, 'Honorifics', 'Use of honorifics to show respect.'),
+(2, 'Indirect Speech', 'Preference for indirect speech acts.'),
+(3, 'Cultural References', 'Frequent use of cultural references in communication.');
