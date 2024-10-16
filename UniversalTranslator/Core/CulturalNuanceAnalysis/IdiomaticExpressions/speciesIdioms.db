@@ -1,1 +1,147 @@
+-- Create the Species Idioms database
+CREATE DATABASE species_idioms;
 
+-- Use the Species Idioms database
+USE species_idioms;
+
+-- Create the Species table
+CREATE TABLE species (
+    id INT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    code VARCHAR(10) NOT NULL,
+    classification VARCHAR(255) NOT NULL
+);
+
+-- Create the Languages table
+CREATE TABLE languages (
+    id INT PRIMARY KEY,
+    species_id INT NOT NULL,
+    name VARCHAR(255) NOT NULL,
+    code VARCHAR(10) NOT NULL,
+    script VARCHAR(255) NOT NULL,
+    FOREIGN KEY (species_id) REFERENCES species(id)
+);
+
+-- Create the Idioms table
+CREATE TABLE idioms (
+    id INT PRIMARY KEY,
+    language_id INT NOT NULL,
+    idiom VARCHAR(255) NOT NULL,
+    translation VARCHAR(255) NOT NULL,
+    explanation VARCHAR(255) NOT NULL,
+    FOREIGN KEY (language_id) REFERENCES languages(id)
+);
+
+-- Create the Idiom Variations table
+CREATE TABLE idiom_variations (
+    id INT PRIMARY KEY,
+    idiom_id INT NOT NULL,
+    variation VARCHAR(255) NOT NULL,
+    FOREIGN KEY (idiom_id) REFERENCES idioms(id)
+);
+
+-- Create the Idiom Examples table
+CREATE TABLE idiom_examples (
+    id INT PRIMARY KEY,
+    idiom_id INT NOT NULL,
+    example VARCHAR(255) NOT NULL,
+    FOREIGN KEY (idiom_id) REFERENCES idioms(id)
+);
+
+-- Create the Idiom Contexts table
+CREATE TABLE idiom_contexts (
+    id INT PRIMARY KEY,
+    idiom_id INT NOT NULL,
+    context VARCHAR(255) NOT NULL,
+    FOREIGN KEY (idiom_id) REFERENCES idioms(id)
+);
+
+-- Create the Idiom Synonyms table
+CREATE TABLE idiom_synonyms (
+    id INT PRIMARY KEY,
+    idiom_id INT NOT NULL,
+    synonym VARCHAR(255) NOT NULL,
+    FOREIGN KEY (idiom_id) REFERENCES idioms(id)
+);
+
+-- Create the Idiom Antonyms table
+CREATE TABLE idiom_antonyms (
+    id INT PRIMARY KEY,
+    idiom_id INT NOT NULL,
+    antonym VARCHAR(255) NOT NULL,
+    FOREIGN KEY (idiom_id) REFERENCES idioms(id)
+);
+
+-- Insert sample data into the Species table
+INSERT INTO species (id, name, code, classification)
+VALUES
+(1, 'Zyloxians', 'zyx', 'Mammalian'),
+(2, 'Xhk'kht', 'xhk', 'Insectoid'),
+(3, 'N'Tari', 'nta', 'Reptilian');
+
+-- Insert sample data into the Languages table
+INSERT INTO languages (id, species_id, name, code, script)
+VALUES
+(1, 1, 'Zyloxian', 'zyx', 'Zyloxian Script'),
+(2, 2, 'Xhk'kht', 'xhk', 'Xhk'kht Script'),
+(3, 3, 'N'Tari', 'nta', 'N'Tari Script');
+
+-- Insert sample data into the Idioms table
+INSERT INTO idioms (id, language_id, idiom, translation, explanation)
+VALUES
+(1, 1, 'zhrak zhilak', 'hello goodbye', 'A common greeting and farewell phrase'),
+(2, 1, 'zhilak zhrak', 'goodbye hello', 'A phrase used to bid farewell and welcome at the same time'),
+(3, 2, 'khtkht khtkhtkht', 'hello goodbye friend', 'A phrase used to greet and bid farewell to a friend'),
+(4, 2, 'khtkhtkht khtkht', 'goodbye hello friend', 'A phrase used to bid farewell and welcome a friend at the same time'),
+(5, 3, 'ntari ntarikht', 'hello goodbye', 'A common greeting and farewell phrase'),
+(6, 3, 'ntarikht ntari', 'goodbye hello', 'A phrase used to bid farewell and welcome at the same time');
+
+-- Insert sample data into the Idiom Variations table
+INSERT INTO idiom_variations (id, idiom_id, variation)
+VALUES
+(1, 1, 'zhrak zhilak khtkht'),
+(2, 1, 'zhilak zhrak khtkht'),
+(3, 2, 'khtkht khtkhtkht khtkht'),
+(4, 2, 'khtkhtkht khtkht khtkht'),
+(5 , 3, 'ntari ntarikht ntari'),
+(6, 3, 'ntarikht ntari ntari');
+
+-- Insert sample data into the Idiom Examples table
+INSERT INTO idiom_examples (id, idiom_id, example)
+VALUES
+(1, 1, 'Zhrak zhilak, khtkht!'),
+(2, 1, 'Zhilak zhrak, khtkht!'),
+(3, 2, 'Khtkht khtkhtkht, khtkht!'),
+(4, 2, 'Khtkhtkht khtkht, khtkht!'),
+(5, 3, 'Ntari n tarikht, ntari!'),
+(6, 3, 'Ntarikht ntari, ntari!');
+
+-- Insert sample data into the Idiom Contexts table
+INSERT INTO idiom_contexts (id, idiom_id, context)
+VALUES
+(1, 1, 'Formal greeting'),
+(2, 1, 'Informal greeting'),
+(3, 2, 'Formal farewell'),
+(4, 2, 'Informal farewell'),
+(5, 3, 'Formal introduction'),
+(6, 3, 'Informal introduction');
+
+-- Insert sample data into the Idiom Synonyms table
+INSERT INTO idiom_synonyms (id, idiom_id, synonym)
+VALUES
+(1, 1, 'zhrak zhilak khtkht'),
+(2, 1, 'zhilak zhrak khtkht'),
+(3, 2, 'khtkht khtkhtkht khtkht'),
+(4, 2, 'khtkhtkht khtkht khtkht'),
+(5, 3, 'ntari ntarikht ntari'),
+(6, 3, 'ntarikht ntari ntari');
+
+-- Insert sample data into the Idiom Antonyms table
+INSERT INTO idiom_antonyms (id, idiom_id, antonym)
+VALUES
+(1, 1, 'zhilak zhrak'),
+(2, 1, 'zhrak zhilak'),
+(3, 2, 'khtkhtkht khtkht'),
+(4, 2, 'khtkht khtkhtkht'),
+(5, 3, 'ntarikht ntari'),
+(6, 3, 'ntari ntarikht');
