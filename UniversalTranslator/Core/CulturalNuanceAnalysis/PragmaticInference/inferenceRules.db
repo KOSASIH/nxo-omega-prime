@@ -1,1 +1,90 @@
+-- Create the Inference Rules database
+CREATE DATABASE inference_rules;
 
+-- Use the Inference Rules database
+USE inference_rules;
+
+-- Create the Species table
+CREATE TABLE species (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(255) NOT NULL,
+    code VARCHAR(10) NOT NULL,
+    classification VARCHAR(255) NOT NULL
+);
+
+-- Create the Inference Rules table
+CREATE TABLE inference_rules (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    species_id INT NOT NULL,
+    rule_name VARCHAR(255) NOT NULL,
+    rule_description TEXT NOT NULL,
+    rule_expression TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (species_id) REFERENCES species(id)
+);
+
+-- Create the Rule Contexts table
+CREATE TABLE rule_contexts (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    rule_id INT NOT NULL,
+    context VARCHAR(255) NOT NULL,
+    FOREIGN KEY (rule_id) REFERENCES inference_rules(id)
+);
+
+-- Create the Rule Examples table
+CREATE TABLE rule_examples (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    rule_id INT NOT NULL,
+    example TEXT NOT NULL,
+    FOREIGN KEY (rule_id) REFERENCES inference_rules(id)
+);
+
+-- Create the Rule Variants table
+CREATE TABLE rule_variants (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    rule_id INT NOT NULL,
+    variant_expression TEXT NOT NULL,
+    FOREIGN KEY (rule_id) REFERENCES inference_rules(id)
+);
+
+-- Insert sample data into the Species table
+INSERT INTO species (name, code, classification)
+VALUES
+('Zyloxians', 'zyx', 'Mammalian'),
+('Xhk\'kht', 'xhk', 'Insectoid'),
+('N\'Tari', 'nta', 'Reptilian');
+
+-- Insert sample data into the Inference Rules table
+INSERT INTO inference_rules (species_id, rule_name, rule_description, rule_expression)
+VALUES
+(1, 'Zyloxian Greeting', 'A rule for greeting Zyloxians based on time of day.', 'IF time_of_day = "morning" THEN greeting = "Zhrak zhilak"'),
+(2, 'Xhk\'kht Farewell', 'A rule for bidding farewell to Xhk\'kht based on social context.', 'IF social_context = "formal" THEN farewell = "Khtkht khtkhtkht"'),
+(3, 'N\'Tari Introduction', 'A rule for introducing oneself to N\'Tari.', 'IF relationship_status = "new" THEN introduction = "N\'Tari ntarikht"');
+
+-- Insert sample data into the Rule Contexts table
+INSERT INTO rule_contexts (rule_id, context)
+VALUES
+(1, 'Formal greeting in the morning'),
+(1, 'Informal greeting in the evening'),
+(2, 'Formal farewell in a meeting'),
+(2, 'Informal farewell among friends'),
+(3, 'Introduction in a social gathering'),
+(3, 'Introduction in a professional setting');
+
+-- Insert sample data into the Rule Examples table
+INSERT INTO rule_examples (rule_id, example)
+VALUES
+(1, 'Zhrak zhilak, my friend!'),
+(1, 'Zhrak zhilak, esteemed guests!'),
+(2, 'Khtkht khtkhtkht, see you soon!'),
+(2, 'Khtkht, my dear friend!'),
+(3, 'N\'Tari ntarikht, I am honored to meet you.'),
+(3, 'N\'Tari ntarikht, let us collaborate.');
+
+-- Insert sample data into the Rule Variants table
+INSERT INTO rule_variants (rule_id, variant_expression)
+VALUES
+(1, 'IF time_of_day = "evening" THEN greeting = "Zhilak zhrak"'),
+(2, 'IF social_context = "informal" THEN farewell = "Khtkht"'),
+(3, 'IF relationship_status = "acquaintance" THEN introduction = "N\'Tari ntari"');
