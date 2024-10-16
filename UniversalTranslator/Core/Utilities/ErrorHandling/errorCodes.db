@@ -1,1 +1,79 @@
+-- Error Codes Database (v1.0.0 Galactic Standard Edition)
 
+-- Table: error_codes
+CREATE TABLE error_codes (
+  id SERIAL PRIMARY KEY,
+  error_code VARCHAR(20) NOT NULL UNIQUE,
+  error_message TEXT NOT NULL,
+  severity_level VARCHAR(20) NOT NULL CHECK (severity_level IN ('INFO', 'WARNING', 'ERROR', 'CRITICAL')),
+  category VARCHAR(50) NOT NULL,
+  resolution_steps TEXT,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Table: error_categories
+CREATE TABLE error_categories (
+  id SERIAL PRIMARY KEY,
+  category_name VARCHAR(50) NOT NULL UNIQUE,
+  description TEXT,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Table: error_logs
+CREATE TABLE error_logs (
+  id SERIAL PRIMARY KEY,
+  error_code_id INTEGER NOT NULL,
+  timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  user_id INTEGER,
+  spacecraft_id INTEGER,
+  additional_info TEXT,
+  FOREIGN KEY (error_code_id) REFERENCES error_codes(id),
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Table: user_profiles
+CREATE TABLE user_profiles (
+  id SERIAL PRIMARY KEY,
+  username VARCHAR(50) NOT NULL UNIQUE,
+  species_id INTEGER NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Table: spacecraft_profiles
+CREATE TABLE spacecraft_profiles (
+  id SERIAL PRIMARY KEY,
+  spacecraft_name VARCHAR(100) NOT NULL,
+  model VARCHAR(50) NOT NULL,
+  manufacturer VARCHAR(100) NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Indexes
+CREATE INDEX idx_error_codes_category ON error_codes (category);
+CREATE INDEX idx_error_logs_error_code_id ON error_logs (error_code_id);
+CREATE INDEX idx_user_profiles_username ON user_profiles (username);
+CREATE INDEX idx_spacecraft_profiles_name ON spacecraft_profiles (spacecraft_name);
+
+-- Views
+CREATE VIEW vw_error_summary AS
+SELECT ec.error_code, ec.error_message, ec.severity_level, ec.category, COUNT(el.id) AS occurrence_count
+FROM error_codes ec
+LEFT JOIN error_logs el ON ec.id = el.error_code_id
+GROUP BY ec.id;
+
+CREATE VIEW vw_user_error_logs AS
+SELECT ul.username, el.timestamp, ec.error_code, ec.error_message
+FROM error_logs el
+JOIN user_profiles ul ON el.user_id = ul.id
+JOIN error_codes ec ON el.error_code_id = ec.id;
+
+CREATE VIEW vw_spacecraft_error_logs AS
+SELECT sp.spacecraft_name, el.timestamp, ec.error_code, ec.error_message
+FROM error_logs el
+JOIN spacecraft_profiles sp ON el.spacecraft_id = sp.id
+JOIN error_codes ec ON el.error_code_id = ec.id;
