@@ -1,1 +1,127 @@
+-- Create the Translation Database
+CREATE DATABASE translation_database;
 
+-- Use the Translation Database
+USE translation_database;
+
+-- Create the Languages table
+CREATE TABLE languages (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(255) NOT NULL,
+    code VARCHAR(10) NOT NULL,
+    script VARCHAR(255) NOT NULL,
+    classification VARCHAR(255) NOT NULL
+);
+
+-- Create the Phrases table
+CREATE TABLE phrases (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    language_id INT NOT NULL,
+    phrase TEXT NOT NULL,
+    translation TEXT NOT NULL,
+    pronunciation TEXT,
+    part_of_speech VARCHAR(255),
+    FOREIGN KEY (language_id) REFERENCES languages(id)
+);
+
+-- Create the Sentences table
+CREATE TABLE sentences (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    language_id INT NOT NULL,
+    sentence TEXT NOT NULL,
+    translation TEXT NOT NULL,
+    sentence_type VARCHAR(255) NOT NULL,
+    FOREIGN KEY (language_id) REFERENCES languages(id)
+);
+
+-- Create the Idioms table
+CREATE TABLE idioms (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    language_id INT NOT NULL,
+    idiom TEXT NOT NULL,
+    translation TEXT NOT NULL,
+    explanation TEXT,
+    usage_example TEXT,
+    FOREIGN KEY (language_id) REFERENCES languages(id)
+);
+
+-- Create the GrammarRules table
+CREATE TABLE grammar_rules (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    language_id INT NOT NULL,
+    rule_name VARCHAR(255) NOT NULL,
+    rule_description TEXT NOT NULL,
+    example TEXT,
+    FOREIGN KEY (language_id) REFERENCES languages(id)
+);
+
+-- Create the Vocabulary table
+CREATE TABLE vocabulary (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    language_id INT NOT NULL,
+    word TEXT NOT NULL,
+    translation TEXT NOT NULL,
+    part_of_speech VARCHAR(255),
+    synonyms TEXT,
+    antonyms TEXT,
+    FOREIGN KEY (language_id) REFERENCES languages(id)
+);
+
+-- Create the PronunciationGuide table
+CREATE TABLE pronunciation_guide (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    language_id INT NOT NULL,
+    phoneme TEXT NOT NULL,
+    pronunciation TEXT NOT NULL,
+    example TEXT,
+    FOREIGN KEY (language_id) REFERENCES languages(id)
+);
+
+-- Insert sample data into the Languages table
+INSERT INTO languages (name, code, script, classification)
+VALUES
+('Zyloxian', 'zyx', 'Zyloxian Script', 'Mammalian'),
+('Xhk\'kht', 'xhk', 'Xhk\'kht Script', 'Insectoid'),
+('N\'Tari', 'nta', 'N\'Tari Script', 'Reptilian');
+
+-- Insert sample data into the Phrases table
+INSERT INTO phrases (language_id, phrase, translation, pronunciation, part_of_speech)
+VALUES
+(1, 'Greetings, traveler.', 'Hello, traveler.', 'GREH-tee-ngs TRAY-vuh-ler', 'greeting'),
+(2, 'K\'tkt tk\'tk.', 'Goodbye, friend.', 'KUH-tkuh TUK-tuk', 'farewell'),
+(3, 'N\'tar n\'tar.', 'Thank you, kind one.', 'NAH-tar NAH-tar', 'expression of gratitude');
+
+-- Insert sample data into the Sentences table
+INSERT INTO sentences (language_id, sentence, translation, sentence_type)
+VALUES
+(1, 'The Zyloxian sun is shining brightly today.', 'The sun is shining brightly today.', 'declarative'),
+(2, 'Xhk\'kht tk\'tk tk\'tk.', 'The Xhk\'kht are a proud species.', 'declarative'),
+(3, 'N\'Tari n\'tar n\'tar n\'tar.', 'The N\'Tari are a peaceful species.', 'declarative');
+
+-- Insert sample data into the Idioms table
+INSERT INTO idioms (language_id, idiom, translation, explanation, usage_example)
+VALUES
+(1, 'Break a leg!', 'Good luck!', 'This idiom is used to wish someone good luck before a performance or a challenging situation.', 'Before a big presentation, my friend said "Break a leg!" to wish me good luck.'),
+(2, 'Bite the bullet.', 'Endure a difficult situation.', 'This idiom is used to encourage someone to endure a difficult situation with courage and determination.', 'When I was nervous about public speaking, my teacher told me to "bite the bullet" and just do it.'),
+(3, 'Cost an arm and a leg.', 'Be very expensive.', 'This idiom is used to describe something that is very expensive.', 'The new spaceship costs an arm and a leg, but it\'s worth it for the advanced technology.');
+
+-- Insert sample data into the GrammarRules table
+INSERT INTO grammar_rules (language_id, rule_name, rule_description, example)
+VALUES
+(1, 'Subject-Verb Agreement', 'In Zyloxian, the verb must agree with the subject in number.', 'The Zyloxian sun (singular) shines brightly today.'),
+(2, 'Case Marking', 'In Xhk\'kht, nouns are marked with cases to indicate their grammatical function.', 'The Xhk\'kht (nominative) tk\'tk tk\'tk (accusative).'),
+(3, 'Tense and Aspect', 'In N\'Tari, verbs are marked with tense and aspect to indicate time and duration.', 'The N\'Tari (present tense) n\'tar n\'tar (completed action).');
+
+-- Insert sample data into the Vocabulary table
+INSERT INTO vocabulary (language_id, word, translation, part_of_speech, synonyms, antonyms)
+VALUES
+(1, 'zha\'thik', 'hello', 'greeting', 'greetings, hi', 'goodbye'),
+(2, 'k\'tkt', 'friend', 'noun', 'buddy, pal', 'enemy'),
+(3, 'n\'tar', 'thank you', 'expression of gratitude', 'thanks, appreciation', 'insult');
+
+-- Insert sample data into the PronunciationGuide table
+INSERT INTO pronunciation_guide (language_id, phoneme, pronunciation, example)
+VALUES
+(1, 'zh', 'ZH (like "treasure" without the "t")', 'zha\'thik'),
+(2, 'k\'', 'KUH (like "cook" without the "o")', 'k\'tkt'),
+(3, 'n\'', 'NAH (like "not" without the "t")', 'n\'tar');
