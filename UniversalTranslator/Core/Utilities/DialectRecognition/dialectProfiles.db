@@ -1,1 +1,104 @@
+-- Dialect Profiles Database (v3.14.7 Omega Prime Edition)
 
+-- Table: dialect_profiles
+CREATE TABLE dialect_profiles (
+  id SERIAL PRIMARY KEY,
+  species_id INTEGER NOT NULL,
+  dialect_name VARCHAR(255) NOT NULL,
+  language_family VARCHAR(100) NOT NULL,
+  script_type VARCHAR(50) NOT NULL,
+  phonetic_profile TEXT NOT NULL,
+  lexical_profile TEXT NOT NULL,
+  grammatical_profile TEXT NOT NULL,
+  cultural_context TEXT,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (species_id) REFERENCES species_profiles(id)
+);
+
+-- Table: species_profiles
+CREATE TABLE species_profiles (
+  id SERIAL PRIMARY KEY,
+  species_name VARCHAR(255) NOT NULL,
+  homeworld VARCHAR(100) NOT NULL,
+  planetary_system VARCHAR(100) NOT NULL,
+  galactic_region VARCHAR(100) NOT NULL,
+  language_isolation_level INTEGER NOT NULL, -- 1-5, 1 being most isolated
+  cultural_complexity_level INTEGER NOT NULL, -- 1-5, 1 being most complex
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Table: dialect_features
+CREATE TABLE dialect_features (
+  id SERIAL PRIMARY KEY,
+  dialect_id INTEGER NOT NULL,
+  feature_type VARCHAR(50) NOT NULL, -- phonetic, lexical, grammatical
+  feature_name VARCHAR(100) NOT NULL,
+  feature_description TEXT,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (dialect_id) REFERENCES dialect_profiles(id)
+);
+
+-- Table: dialect_relationships
+CREATE TABLE dialect_relationships (
+  id SERIAL PRIMARY KEY,
+  dialect_id INTEGER NOT NULL,
+  related_dialect_id INTEGER NOT NULL,
+  relationship_type VARCHAR(50) NOT NULL, -- mutual_intelligibility, dialect_chain, language_family
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (dialect_id) REFERENCES dialect_profiles(id),
+  FOREIGN KEY (related_dialect_id) REFERENCES dialect_profiles(id)
+);
+
+-- Table: language_isolation_factors
+CREATE TABLE language_isolation_factors (
+  id SERIAL PRIMARY KEY,
+  species_id INTEGER NOT NULL,
+  isolation_factor_type VARCHAR(50) NOT NULL, -- geographical, cultural, historical
+  isolation_factor_name VARCHAR(100) NOT NULL,
+  isolation_factor_description TEXT,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (species_id) REFERENCES species_profiles(id)
+);
+
+-- Table: cultural_complexity_factors
+CREATE TABLE cultural_complexity_factors (
+  id SERIAL PRIMARY KEY,
+  species_id INTEGER NOT NULL,
+  complexity_factor_type VARCHAR(50) NOT NULL, -- social_hierarchy, ritual_practices, mythological_influences
+  complexity_factor_name VARCHAR(100) NOT NULL,
+  complexity_factor_description TEXT,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (species_id) REFERENCES species_profiles(id)
+);
+
+-- Indexes
+CREATE INDEX idx_dialect_profiles_species_id ON dialect_profiles (species_id);
+CREATE INDEX idx_species_profiles_homeworld ON species_profiles (homeworld);
+CREATE INDEX idx_dialect_features_dialect_id ON dialect_features (dialect_id);
+CREATE INDEX idx_dialect_relationships_dialect_id ON dialect_relationships (dialect_id);
+CREATE INDEX idx_dialect_relationships_related_dialect_id ON dialect_relationships (related_dialect_id);
+CREATE INDEX idx_language_isolation_factors_species_id ON language_isolation_factors (species_id);
+CREATE INDEX idx_cultural_complexity_factors_species_id ON cultural_complexity_factors (species_id);
+
+-- Views
+CREATE VIEW vw_dialect_profiles AS
+SELECT dp.id, dp.dialect_name, sp.species_name, sp.homeworld, dp.phonetic_profile, dp.lexical_profile, dp.grammatical_profile
+FROM dialect_profiles dp
+JOIN species_profiles sp ON dp.species_id = sp.id;
+
+CREATE VIEW vw_dialect_features AS
+SELECT df.id, df.feature_type, df.feature_name, dp.dialect_name
+FROM dialect_features df
+JOIN dialect_profiles dp ON df.dialect_id = dp.id;
+
+CREATE VIEW vw_dialect_relationships AS
+SELECT dr.id, dp1.dialect_name AS dialect_name, dp2.dialect_name AS related_dialect_name, dr.relationship_type
+FROM dialect_relationships dr
+JOIN dialect_profiles dp1 ON dr.dialect_id = dp1.id
+JOIN dialect_profiles dp2 ON dr.related_dialect_id = dp2.id;
