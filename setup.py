@@ -11,7 +11,7 @@ setuptools.setup(
     url='https://github.com/KOSASIH/nxo-omega-prime',
     packages=setuptools.find_packages(),
     install_requires=[
-        'cryptography==3.4.7',
+        'cryptography==43.0.1',
         'fabric==2.5.0',
         'docker==4.4.0'
     ],
